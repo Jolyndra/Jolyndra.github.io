@@ -7,8 +7,8 @@
   var VOYAGER_REF_KM = 24180000000;
   var VOYAGER_RATE_KMS = 17;
 
-  /** 访问计数状态 */
-  var visitPvState = { status: "idle", value: null, localOnly: false };
+  /** 访问计数状态（仅 CountAPI 全局计数；不做本地 localStorage，以免各设备数字对不上） */
+  var visitPvState = { status: "idle", value: null };
 
   function getLang() {
     return localStorage.getItem(STORAGE_LANG) === "en" ? "en" : "zh";
@@ -112,11 +112,7 @@
       visitEl.textContent = na;
     } else if (visitPvState.status === "ok" && visitPvState.value != null) {
       visitEl.textContent = String(visitPvState.value);
-      if (visitPvState.localOnly) {
-        visitEl.title = lang === "en" ? "Local estimate (API unreachable)" : "网络不可用时的本地累计（仅本机浏览器）";
-      } else {
-        visitEl.removeAttribute("title");
-      }
+      visitEl.removeAttribute("title");
     } else if (visitPvState.status === "err") {
       visitEl.textContent = err;
     } else {
@@ -128,42 +124,32 @@
     var ns = document.body && document.body.getAttribute("data-count-namespace");
     var key = (document.body && document.body.getAttribute("data-count-key")) || "pv";
     if (!ns || !String(ns).trim()) {
-      visitPvState = { status: "na", value: null, localOnly: false };
+      visitPvState = { status: "na", value: null };
       refreshSiteStats();
       return;
     }
-    visitPvState = { status: "loading", value: null, localOnly: false };
+    visitPvState = { status: "loading", value: null };
     refreshSiteStats();
     var nsTrim = String(ns).trim();
     var keyTrim = String(key).trim();
     var url = "https://api.countapi.xyz/hit/" + encodeURIComponent(nsTrim) + "/" + encodeURIComponent(keyTrim);
 
-    function bumpLocalFallback() {
-      try {
-        var storageKey = "site-pv-local-" + nsTrim + "-" + keyTrim;
-        var v = (parseInt(localStorage.getItem(storageKey) || "0", 10) || 0) + 1;
-        localStorage.setItem(storageKey, String(v));
-        visitPvState = { status: "ok", value: v, localOnly: true };
-      } catch (e) {
-        visitPvState = { status: "err", value: null, localOnly: false };
-      }
-      refreshSiteStats();
-    }
-
     fetch(url)
       .then(function (r) {
+        if (!r.ok) throw new Error("http");
         return r.json();
       })
       .then(function (data) {
         if (data && data.value != null) {
-          visitPvState = { status: "ok", value: data.value, localOnly: false };
+          visitPvState = { status: "ok", value: data.value };
         } else {
-          bumpLocalFallback();
+          visitPvState = { status: "err", value: null };
         }
         refreshSiteStats();
       })
       .catch(function () {
-        bumpLocalFallback();
+        visitPvState = { status: "err", value: null };
+        refreshSiteStats();
       });
   }
 
