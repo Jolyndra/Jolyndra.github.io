@@ -18,7 +18,13 @@
       } catch (e) {}
     </script>
   </head>
-  <body data-plausible-domain="">
+  <!-- 累计访问已启用（CountAPI：命名空间 jolyndra-github-io-main / key pv）。勿与他人共用同一命名空间。 -->
+  <body
+    data-plausible-domain=""
+    data-site-launch="2026-04-11T00:00:00+08:00"
+    data-count-namespace="jolyndra-github-io-main"
+    data-count-key="pv"
+  >
     <div class="top-nav-wrap">
       <div class="top-nav-inner">
         <header class="top-nav" role="navigation" aria-label="页面导航">
@@ -147,6 +153,18 @@
 
           <footer>
             <p>© <span id="year"></span> <span class="footer-meta" data-i18n-html="footer.rights">尹立健 · 更新：2026 年 4 月</span></p>
+            <p class="site-stats" aria-label="站点统计">
+              <span class="site-stats-line">
+                <span data-i18n="stats.uptime_label">本站已运行</span>
+                <strong id="stat-uptime">—</strong>
+              </span>
+              <span class="site-stats-sep" aria-hidden="true">·</span>
+              <span class="site-stats-line" id="stat-visits-wrap">
+                <span data-i18n="stats.visits_label">累计访问（PV）</span>
+                <strong id="stat-visits">—</strong>
+              </span>
+            </p>
+            <p class="site-stats-note" data-i18n="stats.note">访问次数需配置 CountAPI 命名空间；运行时间为本地根据上线日估算。</p>
           </footer>
         </div>
       </div>

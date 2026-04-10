@@ -197,6 +197,36 @@ ul { margin: 0; padding-left: 20px; }
 
 footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--faint); }
 
+.site-stats {
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.site-stats-line {
+  display: inline;
+}
+
+.site-stats-line strong {
+  color: var(--text);
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.site-stats-sep {
+  margin: 0 8px;
+  opacity: 0.45;
+}
+
+.site-stats-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--faint);
+  max-width: 52em;
+}
+
 @media (max-width: 720px) {
   :root {
     --sticky-nav-offset: 0px;
