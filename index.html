@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>尹立健 - 个人主页</title>
+    <meta name="description" content="尹立健个人主页：教育背景、科研兴趣、项目经历与联系方式。" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="header-main">
+          <h1>尹立健 <span>/ Yin Lijian</span></h1>
+          <p class="intro">
+            我目前就读于北京航空航天大学软件学院（软件工程本科）。我主要关注软件工程实践、图学习与系统性能优化，当前正在进行“高性能
+            AE 分离式大模型推理通信库”相关毕业设计工作。
+          </p>
+          <p class="links">
+            <a href="https://github.com/sixgoold" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="mailto:22371083@buaa.edu.cn">Email</a>
+          </p>
+        </div>
+        <div class="avatar-box">
+          <img class="avatar" src="./avatar.jpg" alt="尹立健头像" />
+        </div>
+      </header>
+
+      <main>
+        <section>
+          <h2>研究兴趣</h2>
+          <ul>
+            <li>软件工程与工程化交付</li>
+            <li>图神经网络与供应链安全分析</li>
+            <li>大模型推理系统优化与低时延通信</li>
+            <li>前后端协同与高性能 Web 应用</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>教育经历</h2>
+          <ul class="timeline">
+            <li>
+              <span class="time">2022.09 - 2026.06</span>
+              <div>
+                <strong>北京航空航天大学</strong>，软件工程本科，软件学院<br />
+                GPA 3.52/4.00，均分 86.39
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>科研经历</h2>
+          <ul class="timeline">
+            <li>
+              <span class="time">2024.09 - 2024.12</span>
+              <div>
+                <strong>基于图神经网络（GNN）的供应链隐性链接预测</strong><br />
+                针对供应链隐性链接预测问题，独立完成文献综述、数据处理、模型实现（GCN/GraphSAGE）与实验分析全流程。<br />
+                通过优化模型（GraphSAGE+MLP）与评估指标，将预测模型AUC从0.79提升至0.83，并完成完整结题报告。
+              </div>
+            </li>
+            <li>
+              <span class="time">2025.12 - 至今</span>
+              <div>
+                <strong>高性能 AE 分离式大模型推理通信库设计与实现（毕业设计）</strong><br />
+                旨在解决Attention-Expert分离式大模型推理中，Decode阶段因高频、小规模跨设备通信造成的性能瓶颈问题。<br />
+                负责设计并实现一个面向低时延、异构设备（CPU/GPU）的高性能通信库，核心技术方案包括基于RDMA的精简协议、拓扑感知路径选择与动态成员管理。
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>项目经历</h2>
+          <ul class="timeline">
+            <li>
+              <span class="time">2023.08 - 2023.09</span>
+              <div>
+                <strong>坤坤快跑小游戏</strong><br />
+                基于 C++ + EasyX 开发的 2D 跑酷小游戏，主题为 kunkun running。玩家需要在持续前进过程中躲避障碍、累积分数，并利用能量触发特殊飞行状态。
+              </div>
+            </li>
+            <li>
+              <span class="time">2023.09 - 2023.12</span>
+              <div>
+                <strong>SanGuo Crisis小游戏</strong><br />
+                面向对象程序设计实践项目，基于 Java Swing 的 2D 动作闯关游戏，题材为三国世界观，支持单人/双人模式、角色选择、技能战斗、道具拾取与关卡推进。
+              </div>
+            </li>
+            <li>
+              <span class="time">2024.03 - 2024.06</span>
+              <div>
+                <strong>网上挂号系统</strong><br />
+                系统面向“猫猫医院”场景，提供预约挂号、病例管理、通知、药品与工作台等功能，并在实践阶段完成了 Docker + Kubernetes + Jenkins 的工程化与微服务化探索。
+              </div>
+            </li>
+            <li>
+              <span class="time">2024.09 - 2024.12</span>
+              <div>
+                <strong>开源“河图”系统</strong><br />
+                负责软件供应链安全分析模块，实现对给定项目（如Log4J）自动构建其上下游依赖图谱，并集成调用漏洞感知、成分分析、许可证分析等多项检测接口。
+              </div>
+            </li>
+            <li>
+              <span class="time">2024.09 - 2024.12</span>
+              <div>
+                <strong>学术分享平台</strong><br />
+                illumineer 是一个面向学术场景的课程项目仓库，包含完整的软件系统分析与设计过程文档，以及前后端分离的实现代码。在项目中担任项目经理并参与前端开发，集成 Elasticsearch 全文检索，关键查询响应控制在 500ms 内。
+              </div>
+            </li>
+            <li>
+              <span class="time">2024.09 - 2024.12</span>
+              <div>
+                <strong>SysY Compiler (Java)</strong><br />
+                基于 Java 实现的教学编译器，面向 SysY 子集，支持从源代码到 LLVM 风格中间表示再到 MIPS 目标代码的完整编译流程。
+              </div>
+            </li>
+            <li>
+              <span class="time">2025.04 - 2025.06</span>
+              <div>
+                <strong>图书管理系统</strong><br />
+                基于 Spring Boot + Vue 3 的前后端分离图书管理系统课程项目，支持用户认证、图书管理、借阅管理和统计报表。
+              </div>
+            </li>
+            <li>
+              <span class="time">2025.06 - 2025.07</span>
+              <div>
+                <strong>科研社交及学习平台</strong><br />
+                KnoWeb 是一个面向科研学习与学术协作场景的知识管理平台，提供文献管理、学习批注、成果发布、学术社交、问答交流等能力。我主要参与前端核心开发“科研项目协作”模块，两轮 Scrum 迭代交付 29 个用户故事。
+              </div>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>技能与奖项</h2>
+          <p>
+            技术栈：C++、Vue 3、Python、Java、JavaScript、Spring Boot、MySQL、Git、Docker、Apifox。
+          </p>
+          <ul>
+            <li>第三期传源书院党校优秀学员（2022.11）</li>
+            <li>北京航空航天大学智创大赛“最佳创意奖”（2022.12）</li>
+          </ul>
+        </section>
+
+        <section id="contact">
+          <h2>联系与合作</h2>
+          <p>
+            如果你对我的研究方向或项目合作感兴趣，欢迎邮件联系：
+            <a href="mailto:22371083@buaa.edu.cn">22371083@buaa.edu.cn</a>。
+          </p>
+          <p>也可以通过 GitHub 查看我的开源动态：<a href="https://github.com/sixgoold">github.com/sixgoold</a>。</p>
+        </section>
+      </main>
+
+      <footer>
+        <p>© <span id="year"></span> 尹立健 · Last updated: Apr 2026</p>
+      </footer>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
