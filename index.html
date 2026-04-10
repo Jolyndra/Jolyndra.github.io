@@ -24,6 +24,9 @@
     data-site-launch="2026-04-11T00:00:00+08:00"
     data-count-namespace="jolyndra-github-io-main"
     data-count-key="pv"
+    data-voyager-ref-ms="1735689600000"
+    data-voyager-ref-km="24180000000"
+    data-voyager-rate-kms="17"
   >
     <div class="top-nav-wrap">
       <div class="top-nav-inner">
@@ -33,6 +36,7 @@
             <a href="#section-projects" data-i18n="nav.projects">项目</a>
             <a href="#section-achievements" data-i18n="nav.achievements">成果</a>
             <a href="#contact" data-i18n="nav.contact">联系</a>
+            <a href="#section-friends" data-i18n="nav.friends">友链</a>
           </nav>
           <div class="toolbar-cluster" role="toolbar" aria-label="站点设置">
             <button type="button" class="toolbar-btn" id="theme-toggle" data-i18n="toolbar.theme_to_dark" aria-pressed="false">暗色</button>
@@ -94,7 +98,11 @@
               <ul class="timeline">
                 <li>
                   <span class="time" data-i18n="time.edu">2022.09 - 2026.06</span>
-                  <div data-i18n-html="edu.1"><strong>北京航空航天大学</strong>，软件工程本科，软件学院<br />GPA 3.52/4.00，均分 86.39</div>
+                  <div data-i18n-html="edu.1"><strong>北京航空航天大学</strong>，软件学院，软件工程专业，本科生<br />GPA 3.52/4.00，均分 86.39</div>
+                </li>
+                <li>
+                  <span class="time" data-i18n="time.edu2">2026.09 起</span>
+                  <div data-i18n-html="edu.2"><strong>上海交通大学</strong>，计算机学院，计算机与大数据技术专业，硕士研究生</div>
                 </li>
               </ul>
             </section>
@@ -149,6 +157,42 @@
               <p data-i18n-html="contact.1">如果你对我的研究方向或项目合作感兴趣，欢迎邮件联系：<a href="mailto:22371083@buaa.edu.cn">22371083@buaa.edu.cn</a>。</p>
               <p data-i18n-html="contact.2">也可以通过 GitHub 查看我的开源动态：<a href="https://github.com/jolyndra" target="_blank" rel="noreferrer">github.com/jolyndra</a>。</p>
             </section>
+
+            <section id="section-friends" class="section-friends" aria-labelledby="friends-heading">
+              <h2 id="friends-heading" data-i18n="sec.friends">友链</h2>
+              <ul class="friend-links">
+                <li>
+                  <a
+                    class="friend-card"
+                    href="https://github.com/Cherrybo0215"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span class="friend-card-name" data-i18n="friend.cherry.name">Cherry0215</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="friend-card"
+                    href="https://soft.buaa.edu.cn/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span class="friend-card-name" data-i18n="friend.buaa_soft.name">北京航空航天大学软件学院</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="friend-card"
+                    href="https://www.cs.sjtu.edu.cn/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <span class="friend-card-name" data-i18n="friend.sjtu_cs.name">上海交通大学计算机学院</span>
+                  </a>
+                </li>
+              </ul>
+            </section>
           </main>
 
           <footer>
@@ -160,11 +204,16 @@
               </span>
               <span class="site-stats-sep" aria-hidden="true">·</span>
               <span class="site-stats-line" id="stat-visits-wrap">
-                <span data-i18n="stats.visits_label">累计访问（PV）</span>
+                <span data-i18n="stats.visits_label">累计访问</span>
                 <strong id="stat-visits">—</strong>
               </span>
             </p>
-            <p class="site-stats-note" data-i18n="stats.note">访问次数需配置 CountAPI 命名空间；运行时间为本地根据上线日估算。</p>
+            <p class="site-stats site-stats--voyager" aria-label="旅行者1号距离">
+              <span class="site-stats-line">
+                <span data-i18n="stats.voyager_label">旅行者1号距地球：</span>
+                <strong id="stat-voyager">—</strong>
+              </span>
+            </p>
           </footer>
         </div>
       </div>

@@ -2,8 +2,21 @@
   var STORAGE_LANG = "lang";
   var STORAGE_THEME = "theme";
 
+  /** 旅行者1号：参考时刻与距离（km）、外推速率 km/s（与太阳径向量级一致，仅供展示） */
+  var VOYAGER_REF_MS = Date.UTC(2025, 0, 1, 0, 0, 0);
+  var VOYAGER_REF_KM = 24180000000;
+  var VOYAGER_RATE_KMS = 17;
+
+  /** 访问计数状态 */
+  var visitPvState = { status: "idle", value: null, localOnly: false };
+
   function getLang() {
     return localStorage.getItem(STORAGE_LANG) === "en" ? "en" : "zh";
+  }
+
+  function getDict() {
+    var lang = getLang();
+    return (window.I18N && window.I18N[lang]) || {};
   }
 
   function isDark() {
@@ -11,17 +24,156 @@
   }
 
   function syncThemeButton() {
-    var lang = getLang();
-    var dict = window.I18N && window.I18N[lang];
+    var dict = getDict();
     var btn = document.getElementById("theme-toggle");
-    if (!btn || !dict) return;
+    if (!btn || !dict["toolbar.theme_to_light"]) return;
     btn.textContent = isDark() ? dict["toolbar.theme_to_light"] : dict["toolbar.theme_to_dark"];
     btn.setAttribute("aria-pressed", isDark() ? "true" : "false");
   }
 
+  function parseLaunchMs(launchStr) {
+    if (!launchStr || !String(launchStr).trim()) return NaN;
+    var s = String(launchStr).trim();
+    var t = new Date(s).getTime();
+    if (!isNaN(t)) return t;
+    var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+    if (m) {
+      return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 0, 0, 0).getTime();
+    }
+    return NaN;
+  }
+
+  function formatUptime(launchMs, lang) {
+    var diff = Math.max(0, Date.now() - launchMs);
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    var mins = Math.floor((diff % 3600000) / 60000);
+    var secs = Math.floor((diff % 60000) / 1000);
+    if (lang === "en") {
+      return days + "d " + hours + "h " + mins + "m " + secs + "s";
+    }
+    return days + " 天 " + hours + " 小时 " + mins + " 分 " + secs + " 秒";
+  }
+
+  function estimateVoyager1EarthKm() {
+    var body = document.body;
+    if (!body) return NaN;
+    var refMs = parseFloat(body.getAttribute("data-voyager-ref-ms"));
+    var refKm = parseFloat(body.getAttribute("data-voyager-ref-km"));
+    var rate = parseFloat(body.getAttribute("data-voyager-rate-kms"));
+    if (!isFinite(refMs)) refMs = VOYAGER_REF_MS;
+    if (!isFinite(refKm)) refKm = VOYAGER_REF_KM;
+    if (!isFinite(rate) || rate <= 0) rate = VOYAGER_RATE_KMS;
+    return refKm + ((Date.now() - refMs) / 1000) * rate;
+  }
+
+  function formatVoyagerDistanceKm(km, lang) {
+    if (!isFinite(km) || km < 0) return "—";
+    var n = Math.round(km);
+    var loc = lang === "en" ? "en-US" : "zh-CN";
+    return n.toLocaleString(loc) + " km";
+  }
+
+  function refreshVoyagerStat() {
+    var lang = getLang();
+    var dict = getDict();
+    var voyagerEl = document.getElementById("stat-voyager");
+    if (!voyagerEl) return;
+    var vkm = estimateVoyager1EarthKm();
+    voyagerEl.textContent = formatVoyagerDistanceKm(vkm, lang);
+    var vtitle = dict["stats.voyager_title"];
+    if (vtitle) voyagerEl.setAttribute("title", vtitle);
+    else voyagerEl.removeAttribute("title");
+  }
+
+  function refreshSiteStats() {
+    var lang = getLang();
+    var dict = getDict();
+    var uptimeEl = document.getElementById("stat-uptime");
+    var visitEl = document.getElementById("stat-visits");
+    var launchStr = document.body && document.body.getAttribute("data-site-launch");
+
+    if (uptimeEl) {
+      if (launchStr) {
+        var ms = parseLaunchMs(launchStr);
+        uptimeEl.textContent = !isNaN(ms) ? formatUptime(ms, lang) : "—";
+      } else {
+        uptimeEl.textContent = "—";
+      }
+    }
+
+    if (!visitEl) return;
+
+    var na = dict["stats.visits_na"] || "未启用";
+    var err = dict["stats.visits_err"] || "暂不可用";
+    var loading = (dict["stats.loading"] || "加载") + "…";
+
+    if (visitPvState.status === "na") {
+      visitEl.textContent = na;
+    } else if (visitPvState.status === "ok" && visitPvState.value != null) {
+      visitEl.textContent = String(visitPvState.value);
+      if (visitPvState.localOnly) {
+        visitEl.title = lang === "en" ? "Local estimate (API unreachable)" : "网络不可用时的本地累计（仅本机浏览器）";
+      } else {
+        visitEl.removeAttribute("title");
+      }
+    } else if (visitPvState.status === "err") {
+      visitEl.textContent = err;
+    } else {
+      visitEl.textContent = loading;
+    }
+  }
+
+  function fetchVisitCountOnce() {
+    var ns = document.body && document.body.getAttribute("data-count-namespace");
+    var key = (document.body && document.body.getAttribute("data-count-key")) || "pv";
+    if (!ns || !String(ns).trim()) {
+      visitPvState = { status: "na", value: null, localOnly: false };
+      refreshSiteStats();
+      return;
+    }
+    visitPvState = { status: "loading", value: null, localOnly: false };
+    refreshSiteStats();
+    var nsTrim = String(ns).trim();
+    var keyTrim = String(key).trim();
+    var url = "https://api.countapi.xyz/hit/" + encodeURIComponent(nsTrim) + "/" + encodeURIComponent(keyTrim);
+
+    function bumpLocalFallback() {
+      try {
+        var storageKey = "site-pv-local-" + nsTrim + "-" + keyTrim;
+        var v = (parseInt(localStorage.getItem(storageKey) || "0", 10) || 0) + 1;
+        localStorage.setItem(storageKey, String(v));
+        visitPvState = { status: "ok", value: v, localOnly: true };
+      } catch (e) {
+        visitPvState = { status: "err", value: null, localOnly: false };
+      }
+      refreshSiteStats();
+    }
+
+    fetch(url)
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (data) {
+        if (data && data.value != null) {
+          visitPvState = { status: "ok", value: data.value, localOnly: false };
+        } else {
+          bumpLocalFallback();
+        }
+        refreshSiteStats();
+      })
+      .catch(function () {
+        bumpLocalFallback();
+      });
+  }
+
   function applyLang(lang) {
     var dict = window.I18N && window.I18N[lang];
-    if (!dict) return;
+    if (!dict) {
+      refreshSiteStats();
+      refreshVoyagerStat();
+      return;
+    }
 
     document.documentElement.lang = lang === "en" ? "en" : "zh-CN";
     var titleEl = document.querySelector("title");
@@ -44,89 +196,7 @@
 
     syncThemeButton();
     refreshSiteStats();
-  }
-
-  /** 访问计数状态：由 CountAPI 异步写入 */
-  var visitPvState = { status: "idle", value: null };
-
-  function parseLaunchMs(launchStr) {
-    if (!launchStr || !String(launchStr).trim()) return NaN;
-    var s = String(launchStr).trim();
-    // 完整 ISO 时间，如 2026-04-11T00:00:00+08:00
-    if (/T/.test(s)) return new Date(s).getTime();
-    // 仅日期 YYYY-MM-DD，按本地 0 点
-    return new Date(s + "T00:00:00").getTime();
-  }
-
-  function formatUptime(launchMs, lang) {
-    var diff = Math.max(0, Date.now() - launchMs);
-    var days = Math.floor(diff / 86400000);
-    var hours = Math.floor((diff % 86400000) / 3600000);
-    var mins = Math.floor((diff % 3600000) / 60000);
-    var secs = Math.floor((diff % 60000) / 1000);
-    if (lang === "en") {
-      return days + "d " + hours + "h " + mins + "m " + secs + "s";
-    }
-    return days + " 天 " + hours + " 小时 " + mins + " 分 " + secs + " 秒";
-  }
-
-  function refreshSiteStats() {
-    var lang = getLang();
-    var dict = window.I18N && window.I18N[lang];
-    var uptimeEl = document.getElementById("stat-uptime");
-    var visitEl = document.getElementById("stat-visits");
-    var launchStr = document.body && document.body.getAttribute("data-site-launch");
-
-    if (uptimeEl && launchStr) {
-      var ms = parseLaunchMs(launchStr);
-      uptimeEl.textContent = !isNaN(ms) ? formatUptime(ms, lang) : "—";
-    } else if (uptimeEl) {
-      uptimeEl.textContent = "—";
-    }
-
-    if (!visitEl || !dict) return;
-    if (visitPvState.status === "na") {
-      visitEl.textContent = dict["stats.visits_na"] || "—";
-    } else if (visitPvState.status === "ok" && visitPvState.value != null) {
-      visitEl.textContent = String(visitPvState.value);
-    } else if (visitPvState.status === "err") {
-      visitEl.textContent = dict["stats.visits_err"] || "—";
-    } else {
-      visitEl.textContent = (dict["stats.loading"] || "") + "…";
-    }
-  }
-
-  function fetchVisitCountOnce() {
-    var ns = document.body && document.body.getAttribute("data-count-namespace");
-    var key = (document.body && document.body.getAttribute("data-count-key")) || "pv";
-    if (!ns || !String(ns).trim()) {
-      visitPvState = { status: "na", value: null };
-      refreshSiteStats();
-      return;
-    }
-    visitPvState = { status: "loading", value: null };
-    refreshSiteStats();
-    var url =
-      "https://api.countapi.xyz/hit/" +
-      encodeURIComponent(String(ns).trim()) +
-      "/" +
-      encodeURIComponent(String(key).trim());
-    fetch(url)
-      .then(function (r) {
-        return r.json();
-      })
-      .then(function (data) {
-        if (data && data.value != null) {
-          visitPvState = { status: "ok", value: data.value };
-        } else {
-          visitPvState = { status: "err", value: null };
-        }
-        refreshSiteStats();
-      })
-      .catch(function () {
-        visitPvState = { status: "err", value: null };
-        refreshSiteStats();
-      });
+    refreshVoyagerStat();
   }
 
   function injectPlausible() {
@@ -171,9 +241,8 @@
 
     injectPlausible();
     fetchVisitCountOnce();
-    setInterval(function () {
-      refreshSiteStats();
-    }, 1000);
+    setInterval(refreshSiteStats, 1000);
+    setInterval(refreshVoyagerStat, 100);
   }
 
   if (document.readyState === "loading") {

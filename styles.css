@@ -195,6 +195,48 @@ ul { margin: 0; padding-left: 20px; }
 @media (min-width: 640px) { .skill-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .section-achievements .ach-block + .ach-block { margin-top: 20px; }
 
+.friend-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.friend-links > li + li {
+  margin-top: 10px;
+}
+
+.friend-card {
+  display: block;
+  max-width: 36rem;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.friend-card:hover {
+  border-color: var(--link);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+}
+
+html[data-theme="dark"] .friend-card:hover {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.friend-card-name {
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.35;
+  color: var(--link);
+}
+
+.friend-card:hover .friend-card-name {
+  text-decoration: underline;
+}
+
 footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--faint); }
 
 .site-stats {
@@ -202,6 +244,10 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
   font-size: 14px;
   line-height: 1.6;
   color: var(--muted);
+}
+
+.site-stats--voyager {
+  margin-top: 6px;
 }
 
 .site-stats-line {
