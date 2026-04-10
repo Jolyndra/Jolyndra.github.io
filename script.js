@@ -7,9 +7,6 @@
   var VOYAGER_REF_KM = 24180000000;
   var VOYAGER_RATE_KMS = 17;
 
-  /** 访问计数状态（仅 CountAPI 全局计数；不做本地 localStorage，以免各设备数字对不上） */
-  var visitPvState = { status: "idle", value: null };
-
   function getLang() {
     return localStorage.getItem(STORAGE_LANG) === "en" ? "en" : "zh";
   }
@@ -88,9 +85,7 @@
 
   function refreshSiteStats() {
     var lang = getLang();
-    var dict = getDict();
     var uptimeEl = document.getElementById("stat-uptime");
-    var visitEl = document.getElementById("stat-visits");
     var launchStr = document.body && document.body.getAttribute("data-site-launch");
 
     if (uptimeEl) {
@@ -101,56 +96,6 @@
         uptimeEl.textContent = "—";
       }
     }
-
-    if (!visitEl) return;
-
-    var na = dict["stats.visits_na"] || "未启用";
-    var err = dict["stats.visits_err"] || "暂不可用";
-    var loading = (dict["stats.loading"] || "加载") + "…";
-
-    if (visitPvState.status === "na") {
-      visitEl.textContent = na;
-    } else if (visitPvState.status === "ok" && visitPvState.value != null) {
-      visitEl.textContent = String(visitPvState.value);
-      visitEl.removeAttribute("title");
-    } else if (visitPvState.status === "err") {
-      visitEl.textContent = err;
-    } else {
-      visitEl.textContent = loading;
-    }
-  }
-
-  function fetchVisitCountOnce() {
-    var ns = document.body && document.body.getAttribute("data-count-namespace");
-    var key = (document.body && document.body.getAttribute("data-count-key")) || "pv";
-    if (!ns || !String(ns).trim()) {
-      visitPvState = { status: "na", value: null };
-      refreshSiteStats();
-      return;
-    }
-    visitPvState = { status: "loading", value: null };
-    refreshSiteStats();
-    var nsTrim = String(ns).trim();
-    var keyTrim = String(key).trim();
-    var url = "https://api.countapi.xyz/hit/" + encodeURIComponent(nsTrim) + "/" + encodeURIComponent(keyTrim);
-
-    fetch(url)
-      .then(function (r) {
-        if (!r.ok) throw new Error("http");
-        return r.json();
-      })
-      .then(function (data) {
-        if (data && data.value != null) {
-          visitPvState = { status: "ok", value: data.value };
-        } else {
-          visitPvState = { status: "err", value: null };
-        }
-        refreshSiteStats();
-      })
-      .catch(function () {
-        visitPvState = { status: "err", value: null };
-        refreshSiteStats();
-      });
   }
 
   function applyLang(lang) {
@@ -226,7 +171,6 @@
     }
 
     injectPlausible();
-    fetchVisitCountOnce();
     setInterval(refreshSiteStats, 1000);
     setInterval(refreshVoyagerStat, 100);
   }
