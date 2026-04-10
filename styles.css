@@ -8,8 +8,8 @@
   --border: #e5e7eb;
   --link: #1d4ed8;
   --accent: #1e40af;
-  /* 侧栏 sticky 时停在导航下方，需与导航实际高度大致一致 */
-  --sticky-nav-offset: 72px;
+  /* 侧栏 sticky 时停在导航下方（略大于导航实际高度，避免贴太紧被挡） */
+  --sticky-nav-offset: 80px;
   /* 锚点跳转时预留导航高度（与侧栏偏移分开，避免移动端侧栏 static 时锚点被挡） */
   --anchor-scroll-margin: calc(var(--sticky-nav-offset) + 12px);
 }
@@ -36,7 +36,12 @@ html[lang="en"] body {
   font-family: Georgia, "Palatino Linotype", "Book Antiqua", Palatino, "Times New Roman", serif;
 }
 
-.container { max-width: 1180px; margin: 0 auto; padding: 18px 24px 54px; }
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  /* 与顶栏拉开一点距离，侧栏头像整体下移 */
+  padding: 28px 24px 54px;
+}
 
 .top-nav-wrap {
   position: sticky;
@@ -198,7 +203,7 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
     --anchor-scroll-margin: 104px;
   }
 
-  .container { padding: 16px 16px 40px; }
+  .container { padding: 22px 16px 40px; }
   .top-nav-inner { padding: 14px 18px 16px; }
   .top-nav { flex-wrap: wrap; align-items: flex-start; }
   .quick-nav { gap: 4px 14px; }
