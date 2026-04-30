@@ -3,28 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" id="meta-theme-color" />
+    <meta
+      name="description"
+      content="北京航空航天大学软件学院本科生；研究方向为大模型性能优化、多模态与 LLM 基础设施（推理与 Serving、通信与并行等）。"
+      id="meta-description"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="jolyndra · 尹立健" id="meta-og-title" />
+    <meta
+      property="og:description"
+      content="北京航空航天大学软件学院本科生；研究方向为大模型性能优化、多模态与 LLM 基础设施（推理与 Serving、通信与并行等）。"
+      id="meta-og-description"
+    />
+    <meta property="og:url" content="https://jolyndra.github.io/" id="meta-og-url" />
+    <meta property="og:image" content="https://jolyndra.github.io/avatar.jpg" id="meta-og-image" />
+    <meta property="og:locale" content="zh_CN" id="meta-og-locale" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="jolyndra · 尹立健" id="meta-twitter-title" />
+    <meta
+      name="twitter:description"
+      content="北京航空航天大学软件学院本科生；研究方向为大模型性能优化、多模态与 LLM 基础设施（推理与 Serving、通信与并行等）。"
+      id="meta-twitter-description"
+    />
+    <meta name="twitter:image" content="https://jolyndra.github.io/avatar.jpg" id="meta-twitter-image" />
+    <link rel="canonical" href="https://jolyndra.github.io/" id="link-canonical" />
     <title>jolyndra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" href="./avatar.jpg" as="image" fetchpriority="high" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" sizes="any" />
     <link rel="icon" href="./avatar.jpg" type="image/jpeg" />
     <link rel="apple-touch-icon" href="./avatar.jpg" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap"
+    />
     <link rel="stylesheet" href="./styles.css" />
     <script>
       try {
         var th = localStorage.getItem("theme");
-        if (th === "dark") document.documentElement.setAttribute("data-theme", "dark");
-        else if (th !== "light" && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        var PAL = ["sakura", "midnight", "amber"];
+        if (PAL.indexOf(th) >= 0) {
+          document.documentElement.setAttribute("data-palette", th);
+        } else if (th === "dark") {
           document.documentElement.setAttribute("data-theme", "dark");
+        } else if (th === "light") {
+          /* 显式浅色 */
+        } else if (th === null || th === "") {
+          if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+            document.documentElement.setAttribute("data-theme", "dark");
+          }
         }
       } catch (e) {}
     </script>
   </head>
   <body
+    data-site-base="https://jolyndra.github.io"
     data-plausible-domain=""
     data-site-launch="2026-04-11T00:00:00+08:00"
     data-voyager-ref-ms="1735689600000"
     data-voyager-ref-km="24180000000"
     data-voyager-rate-kms="17"
   >
+    <a class="skip-link" href="#main-content" id="skip-link" data-i18n="a11y.skip_to_content">跳至主内容</a>
     <div class="top-nav-wrap">
       <div class="top-nav-inner">
         <header class="top-nav" role="navigation" aria-label="页面导航">
@@ -36,7 +78,13 @@
             <a href="#section-friends" data-i18n="nav.friends">友链</a>
           </nav>
           <div class="toolbar-cluster" role="toolbar" aria-label="站点设置">
-            <button type="button" class="toolbar-btn" id="theme-toggle" data-i18n="toolbar.theme_to_dark" aria-pressed="false">暗色</button>
+            <select id="theme-select" class="toolbar-select" aria-label="主题">
+              <option value="light" data-i18n="toolbar.theme_light">浅色</option>
+              <option value="dark" data-i18n="toolbar.theme_dark">暗色</option>
+              <option value="sakura" data-i18n="toolbar.theme_sakura">樱花粉</option>
+              <option value="midnight" data-i18n="toolbar.theme_midnight">午夜蓝</option>
+              <option value="amber" data-i18n="toolbar.theme_amber">琥珀</option>
+            </select>
             <button type="button" class="toolbar-btn toolbar-btn-lang" id="lang-toggle" data-i18n="toolbar.lang_switch">English</button>
           </div>
         </header>
@@ -46,7 +94,15 @@
     <div class="container">
       <div class="page-layout">
         <aside class="sidebar" aria-label="个人信息">
-          <img class="profile-avatar" src="./avatar.jpg" width="120" height="120" alt="" decoding="async" />
+          <img
+            class="profile-avatar"
+            src="./avatar.jpg"
+            width="120"
+            height="120"
+            alt=""
+            decoding="async"
+            fetchpriority="high"
+          />
           <div class="profile-body">
             <h1 class="profile-name" data-i18n="profile.name">尹立健</h1>
             <p class="profile-school" data-i18n="profile.school">北京航空航天大学 · 软件学院</p>
@@ -65,8 +121,20 @@
                 <a class="profile-meta-value" href="https://github.com/jolyndra" target="_blank" rel="noreferrer" data-i18n="link.github">Github</a>
               </li>
               <li class="profile-meta-row">
+                <span class="profile-meta-icon" aria-hidden="true">💬</span>
+                <button type="button" class="profile-meta-value profile-meta-btn" id="wechat-open" data-i18n="link.wechat">
+                  微信
+                </button>
+              </li>
+              <li class="profile-meta-row">
                 <span class="profile-meta-icon" aria-hidden="true">💻</span>
                 <a class="profile-meta-value" href="https://scholar.google.com" target="_blank" rel="noreferrer" data-i18n="link.scholar">谷歌学术</a>
+              </li>
+              <li class="profile-meta-row">
+                <span class="profile-meta-icon" aria-hidden="true">🔗</span>
+                <button type="button" class="profile-meta-value profile-meta-btn" id="share-open" data-i18n="link.share">
+                  分享
+                </button>
               </li>
             </ul>
           </div>
@@ -75,7 +143,7 @@
         <div class="content">
           <p class="intro" data-i18n="intro">软件工程本科在读。研究兴趣主要集中在大模型性能优化、多模态，以及 LLM 基础设施（推理与 Serving、通信与并行、调度与集群等）。当前正在进行「高性能 AE 分离式大模型推理通信库」相关毕业设计工作。</p>
 
-          <main>
+          <main id="main-content" tabindex="-1">
             <section class="section-positioning" aria-labelledby="positioning-heading" id="section-positioning">
               <h2 id="positioning-heading" data-i18n="sec.positioning">个人定位</h2>
               <p class="positioning-line" data-i18n-html="positioning.line">本科生 · 方向为大模型性能优化、多模态与 LLM Infra；欢迎<strong>实习 / 科研助理 / 技术合作</strong>等机会（远程或北京线下可议）。</p>
@@ -144,7 +212,13 @@
             <section class="section-achievements" id="section-achievements">
               <h2 data-i18n="sec.achievements">成果与荣誉</h2>
               <div class="ach-block"><h3 data-i18n="ach.sub.papers">论文</h3><p data-i18n="ach.papers">暂无公开论文；欢迎后续关注更新。</p></div>
-              <div class="ach-block"><h3 data-i18n="ach.sub.awards">竞赛与获奖</h3><li data-i18n="ach.award.2">北京航空航天大学智创大赛「最佳创意奖」（2022.12）</li></ul></div>
+              <div class="ach-block">
+                <h3 data-i18n="ach.sub.awards">竞赛与获奖</h3>
+                <ul class="ach-list">
+                  <li data-i18n="ach.award.1">第三期传源书院党校优秀学员（2022.11）</li>
+                  <li data-i18n="ach.award.2">北京航空航天大学智创大赛「最佳创意奖」（2022.12）</li>
+                </ul>
+              </div>
               <div class="ach-block"><h3 data-i18n="ach.sub.certs">证书</h3><p data-i18n="ach.certs">可在获得证书后在此补充（如 CET、认证考试等）。</p></div>
               <div class="ach-block"><h3 data-i18n="ach.sub.more">博客与分享</h3><p data-i18n="ach.more">可在撰写博客或做技术分享后在此添加链接。</p></div>
             </section>
@@ -210,6 +284,35 @@
         </div>
       </div>
     </div>
+
+    <dialog class="share-image-dialog" id="share-image-dialog" aria-labelledby="share-image-dialog-title">
+      <div class="share-image-dialog-inner">
+        <h2 id="share-image-dialog-title" class="share-image-dialog-title" data-i18n="share.modal_title">分享</h2>
+        <p class="share-image-loading" id="share-image-loading" data-i18n="share.generating">正在生成图片…</p>
+        <img id="share-image-preview" class="share-image-preview" alt="" width="900" height="520" hidden />
+        <canvas id="share-image-canvas" width="900" height="520" hidden aria-hidden="true"></canvas>
+        <p class="share-image-error" id="share-image-error" role="alert" hidden></p>
+        <div class="share-image-actions" id="share-image-actions" hidden>
+          <button type="button" class="share-image-btn share-image-btn-primary" id="share-image-save" data-i18n="share.save_png">
+            保存 PNG
+          </button>
+          <button type="button" class="share-image-btn" id="share-image-copy-link" data-i18n="share.copy">复制网址</button>
+        </div>
+        <p class="share-image-feedback" id="share-image-copy-feedback" role="status" aria-live="polite" hidden></p>
+        <button type="button" class="wechat-dialog-close" id="share-image-close" data-i18n="wechat.close">关闭</button>
+      </div>
+    </dialog>
+
+    <dialog class="wechat-dialog" id="wechat-dialog" aria-labelledby="wechat-dialog-title">
+      <div class="wechat-dialog-inner">
+        <h2 id="wechat-dialog-title" class="wechat-dialog-title" data-i18n="wechat.modal_title">微信二维码</h2>
+        <img src="./weixin.jpg" alt="" class="wechat-dialog-qr" width="280" height="280" decoding="async" />
+        <p class="wechat-dialog-hint" data-i18n="wechat.modal_hint">扫一扫，添加我为好友。</p>
+        <button type="button" class="wechat-dialog-close" id="wechat-dialog-close" data-i18n="wechat.close">关闭</button>
+      </div>
+    </dialog>
+
+    <button type="button" class="back-to-top" id="back-to-top" aria-label="回到顶部" hidden></button>
 
     <script src="./i18n.js"></script>
     <script src="./script.js"></script>
