@@ -141,6 +141,36 @@
     document.head.appendChild(s);
   }
 
+  function initEasterEggRedirect() {
+    var targetUrl = "https://travel-wallet-five.vercel.app/";
+    var secret = [
+      "ArrowUp",
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "ArrowLeft",
+      "ArrowRight",
+      "b",
+      "a",
+    ];
+    var typed = [];
+
+    document.addEventListener("keydown", function (event) {
+      var key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+      typed.push(key);
+      if (typed.length > secret.length) typed.shift();
+      var matched = typed.every(function (k, i) {
+        return k === secret[i];
+      });
+      if (typed.length === secret.length && matched) {
+        window.open(targetUrl, "_blank", "noopener,noreferrer");
+        typed = [];
+      }
+    });
+  }
+
   function init() {
     var y = document.getElementById("year");
     if (y) y.textContent = String(new Date().getFullYear());
@@ -171,6 +201,7 @@
     }
 
     injectPlausible();
+    initEasterEggRedirect();
     setInterval(refreshSiteStats, 1000);
     setInterval(refreshVoyagerStat, 100);
   }

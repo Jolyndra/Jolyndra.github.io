@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业前100件小事 | 我的待办清单</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            padding: 30px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.4rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            background-color: #ecf0f1;
+            height: 12px;
+            border-radius: 6px;
+            margin: 25px 0 30px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2ecc71);
+            width: 0%;
+            border-radius: 6px;
+            transition: width 0.5s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 12px;
+            min-width: 140px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.03);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        #newItemInput {
+            flex-grow: 1;
+            padding: 14px 18px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        #newItemInput:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        #addBtn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #addBtn:hover {
+            background-color: #2980b9;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 15px;
+            margin-bottom: 12px;
+            background-color: #fff;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .todo-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .todo-item.completed {
+            background-color: #f8f9fa;
+            opacity: 0.9;
+        }
+
+        .todo-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #bdc3c7;
+            border-radius: 50%;
+            margin-right: 18px;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .todo-checkbox:checked {
+            background-color: #2ecc71;
+            border-color: #2ecc71;
+        }
+
+        .todo-checkbox:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+
+        .todo-text {
+            flex-grow: 1;
+            font-size: 1.05rem;
+            padding-right: 15px;
+            word-break: break-word;
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: #95a5a6;
+        }
+
+        .todo-input {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 1.05rem;
+            padding: 5px 0;
+            color: #2c3e50;
+            width: 100%;
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-bottom: 1px dashed #3498db;
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #f0f2f5;
+        }
+
+        .edit-btn:hover {
+            color: #3498db;
+        }
+
+        .delete-btn:hover {
+            color: #e74c3c;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #95a5a6;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #bdc3c7;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .controls {
+                flex-direction: column;
+            }
+            .todo-item {
+                padding: 15px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-graduation-cap"></i> 毕业前100件小事</h1>
+            <p class="subtitle">记录、完成、告别你的大学时光 | 可编辑的待办清单</p>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-box">
+                <span class="stat-number" id="totalCount">0</span>
+                <span class="stat-label">总计事项</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="completedCount">0</span>
+                <span class="stat-label">已完成</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="remainingCount">0</span>
+                <span class="stat-label">待完成</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="progressPercent">0%</span>
+                <span class="stat-label">完成进度</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="newItemInput" placeholder="添加一件你想做的新事情..." maxlength="200">
+            <button id="addBtn"><i class="fas fa-plus"></i> 添加</button>
+        </div>
+
+        <ul class="todo-list" id="todoList">
+            <!-- 待办事项将通过JavaScript动态生成 -->
+        </ul>
+
+        <footer>
+            <p>数据已自动保存在您的浏览器中 | 设计：元宝 | 祝您毕业顺利，前程似锦！</p>
+        </footer>
+    </div>
+
+    <script>
+        // 初始的100件小事数据
+        const initialTodos = [
+            "提前联系导师，了解课题组方向，读1-2篇核心论文。",
+            "精通LaTeX，未来写论文的神器。",
+            "在GitHub上创建一个毕业项目，用代码总结大学所学。",
+            "系统学习机器学习/深度学习。",
+            "刷完LeetCode的某个标签（如动态规划）。",
+            "复现一篇经典论文的算法。",
+            "学一门非主流但有趣的编程语言（如Rust, Go, Haskell）。",
+            "开发一个属于自己的Chrome浏览器插件。",
+            "系统学习并使用Docker，部署一个自己的服务。",
+            "深入研究一个开源项目（如Redis, Nginx）的源码。",
+            "考一个专业认证（如AWS/Azure云认证、CKA）。",
+            "在技术博客上写4篇高质量技术文章。",
+            "完整跟完一门顶尖大学的公开课。",
+            "学习并实战网络爬虫，抓取某个感兴趣领域的数据并分析。",
+            "为开源项目提交一次有效的PR。",
+            "在Kaggle或天池上参加一个入门级比赛。",
+            "系统学习一项开发工具链。",
+            "搭建一个属于自己的技术博客/个人网站。",
+            "学习基础的UI/UX设计原则。",
+            "研究你所在领域的顶级会议/期刊列表。",
+            "凌晨去天安门广场看一次升旗。",
+            "坐一趟“开往春天的列车”S2线。",
+            "用脚步丈量完整的北京中轴线。",
+            "去国家图书馆待上一整天，感受知识的浩瀚。",
+            "打卡北京所有的“985”高校校园。",
+            "在胡同里迷一次路，用镜头记录最市井的北京。",
+            "去中国电影资料馆看一场经典老电影。",
+            "夜骑长安街，从国贸到军事博物馆。",
+            "去潘家园旧货市场“淘一次宝”，考验眼力。",
+            "在亮马河畔散步，感受北京的“塞纳河”风情。"
+            // 注：为保持代码长度适中，此处仅示例前30条。实际页面加载时会生成完整的100条。
+            // 完整100条数据已整合在下方代码的初始化部分。
+        ];
+
+        // 完整的100件小事（为了代码可读性，在此处整合，实际已填充）
+        const fullTodoList = [
+            "提前联系导师，了解课题组方向，读1-2篇核心论文。",
+            "精通LaTeX，未来写论文的神器。",
+            "在GitHub上创建一个毕业项目，用代码总结大学所学。",
+            "系统学习机器学习/深度学习。",
+            "刷完LeetCode的某个标签（如动态规划）。",
+            "复现一篇经典论文的算法。",
+            "学一门非主流但有趣的编程语言（如Rust, Go, Haskell）。",
+            "开发一个属于自己的Chrome浏览器插件。",
+            "系统学习并使用Docker，部署一个自己的服务。",
+            "深入研究一个开源项目（如Redis, Nginx）的源码。",
+            "考一个专业认证（如AWS/Azure云认证、CKA）。",
+            "在技术博客上写4篇高质量技术文章。",
+            "完整跟完一门顶尖大学的公开课。",
+            "学习并实战网络爬虫，抓取某个感兴趣领域的数据并分析。",
+            "为开源项目提交一次有效的PR。",
+            "在Kaggle或天池上参加一个入门级比赛。",
+            "系统学习一项开发工具链。",
+            "搭建一个属于自己的技术博客/个人网站。",
+            "学习基础的UI/UX设计原则。",
+            "研究你所在领域的顶级会议/期刊列表。",
+            "凌晨去天安门广场看一次升旗。",
+            "坐一趟“开往春天的列车”S2线。",
+            "用脚步丈量完整的北京中轴线。",
+            "去国家图书馆待上一整天，感受知识的浩瀚。",
+            "打卡北京所有的“985”高校校园。",
+            "在胡同里迷一次路，用镜头记录最市井的北京。",
+            "去中国电影资料馆看一场经典老电影。",
+            "夜骑长安街，从国贸到军事博物馆。",
+            "去潘家园旧货市场“淘一次宝”，考验眼力。",
+            "在亮马河畔散步，感受北京的“塞纳河”风情。",
+            "体验一次“Citywalk”，走一条小众路线。",
+            "去798艺术区看一个感兴趣的展览。",
+            "爬一次夜长城。",
+            "去“宇宙中心”五道口，观察最后一波留学生和年轻潮人。",
+            "在奥森公园跑一个10公里。",
+            "坐一次“北京观光巴士”，当一次纯粹的游客。",
+            "去大柳树鬼市体验深夜的神秘集市。",
+            "打卡所有你喜欢的影视剧里的北京取景地。",
+            "去中国科技馆/国家动物博物馆，找回童年的好奇心。",
+            "在景山公园万春亭，看一次故宫日落。",
+            "学会做5道拿手好菜，未来将是你的社交货币。",
+            "考取驾照。",
+            "养成每周至少3次的规律运动习惯。",
+            "学会游泳，这是一项生存技能。",
+            "给自己做一次全面的体检，了解自己的身体状况。",
+            "系统学习拍照和后期，用手机/相机记录生活。",
+            "整理大学四年的所有数字资料，做好备份和归档。",
+            "写一份未来三年的长期规划。",
+            "尝试连续一周早上7点前起床。",
+            "学习基础穿搭，找到适合自己的1-2种风格。",
+            "把宿舍里所有东西断舍离，只带最必要的去研究生学校。",
+            "学习简单的理财知识，开设一个理财账户。",
+            "每天冥想10分钟，坚持一个月。",
+            "学会一项简单的乐器。",
+            "给五年后的自己写一封邮件，设定发送时间。",
+            "为父母精心准备一份毕业礼物，感谢他们的支持。",
+            "学习简单的自我护理。",
+            "戒掉一个坏习惯。",
+            "养一盆植物，并照顾好它直到毕业。",
+            "尝试“数字排毒”一天，不用任何智能设备。",
+            "和大学里最好的朋友来一次毕业旅行。",
+            "向一位你尊敬的老师深度请教一次，聊聊学术与人生。",
+            "组织或参加一次班级/宿舍的散伙饭，不醉不归。",
+            "和室友拍一组创意毕业照。",
+            "整理大学同学的联系方式，做一个电子通讯录。",
+            "向你默默感谢的人说声谢谢。",
+            "参加一次纯粹的社交活动，认识圈子外的新朋友。",
+            "如果你有喜欢但未表白的人，考虑是否要勇敢一次。",
+            "和高中时代的挚友在北京重聚，聊聊彼此的变化。",
+            "在校园的某个角落埋下一个“时间胶囊”，约定数年后来取。",
+            "为学弟学妹做一次经验分享。",
+            "参加一次志愿者活动。",
+            "请父母来你的学校，做一次导游。",
+            "和实验室/项目组的伙伴好好告别，感谢彼此的支持。",
+            "参加研究生学校的“新生群”，提前认识未来的同学。",
+            "组织一次线上或线下的“技术分享会”，主题自定。",
+            "和曾经有过误会或矛盾的人和解，或者在心里彻底放下。",
+            "用你的专业技能，免费帮朋友/同学一个小忙。",
+            "在学校的论坛/BBS上发一篇毕业感言帖。",
+            "最后听一次学校的讲座，任何主题都好。",
+            "看一场深夜场的电影。",
+            "去一次Livehouse，看一场摇滚或独立音乐演出。",
+            "体验一次脱口秀开放麦，甚至自己写稿上台试一试。",
+            "玩一款你一直想玩但没时间玩的3A大作。",
+            "去环球影城/欢乐谷，像个孩子一样玩一整天。",
+            "打卡北京所有的知名博物馆。",
+            "在专业影院看一场演唱会/歌剧/音乐会的录播。",
+            "去西山鬼笑石，看北京城的夜景。",
+            "在紫竹院公园租一条船，在湖上发呆。",
+            "探索北京所有的知名书店。",
+            "去后海酒吧街，但只点一杯软饮听歌。",
+            "看一场话剧、相声或京剧。",
+            "体验一次沉浸式剧本杀或密室逃脱。",
+            "去北京的郊野公园露营一次，看星空。",
+            "把自己大学四年想看的书/电影清单，划掉至少10部。",
+            "学跳一支简单的舞。",
+            "去中国油画院或今日美术馆，培养一下艺术感知。",
+            "随机坐上一辆公交车，坐到终点站，再坐回来。",
+            "在天气好的下午，去公园的长椅上安静地读一本闲书。",
+            "最后，留出一天，什么计划都不做，随心所欲。"
+        ];
+
+        // 从本地存储加载或初始化待办事项
+        let todoItems = JSON.parse(localStorage.getItem('grad100Todos'));
+        if (!todoItems) {
+            // 初始化：将完整列表转换为对象数组
+            todoItems = fullTodoList.map((text, index) => ({
+                id: Date.now() + index, // 简单生成唯一ID
+                text: text,
+                completed: false
+            }));
+            saveToLocalStorage();
+        }
+
+        const todoListEl = document.getElementById('todoList');
+        const newItemInput = document.getElementById('newItemInput');
+        const addBtn = document.getElementById('addBtn');
+        const progressBar = document.getElementById('progressBar');
+        const totalCountEl = document.getElementById('totalCount');
+        const completedCountEl = document.getElementById('completedCount');
+        const remainingCountEl = document.getElementById('remainingCount');
+        const progressPercentEl = document.getElementById('progressPercent');
+
+        // 初始化：渲染列表并更新统计
+        renderTodoList();
+        updateStats();
+
+        // 添加新事项
+        addBtn.addEventListener('click', addNewTodo);
+        newItemInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addNewTodo();
+            }
+        });
+
+        function addNewTodo() {
+            const text = newItemInput.value.trim();
+            if (text === '') {
+                alert('请输入待办事项内容！');
+                return;
+            }
+            const newItem = {
+                id: Date.now(),
+                text: text,
+                completed: false
+            };
+            todoItems.unshift(newItem); // 添加到开头
+            saveToLocalStorage();
+            renderTodoList();
+            updateStats();
+            newItemInput.value = '';
+            newItemInput.focus();
+        }
+
+        function renderTodoList() {
+            todoListEl.innerHTML = '';
+            if (todoItems.length === 0) {
+                todoListEl.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-clipboard"></i>
+                        <h3>清单空空如也</h3>
+                        <p>添加你的第一件毕业待办事项吧！</p>
+                    </div>
+                `;
+                return;
+            }
+
+            todoItems.forEach(item => {
+                const li = document.createElement('li');
+                li.className = `todo-item ${item.completed ? 'completed' : ''}`;
+                li.dataset.id = item.id;
+                li.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" ${item.completed ? 'checked' : ''}>
+                    <div class="todo-text">
+                        <input type="text" class="todo-input" value="${escapeHtml(item.text)}" maxlength="200">
+                    </div>
+                    <div class="todo-actions">
+                        <button class="action-btn edit-btn" title="编辑"><i class="fas fa-edit"></i></button>
+                        <button class="action-btn delete-btn" title="删除"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+                todoListEl.appendChild(li);
+
+                // 获取内部元素
+                const checkbox = li.querySelector('.todo-checkbox');
+                const textInput = li.querySelector('.todo-input');
+                const editBtn = li.querySelector('.edit-btn');
+                const deleteBtn = li.querySelector('.delete-btn');
+
+                // 勾选完成/未完成
+                checkbox.addEventListener('change', function() {
+                    item.completed = this.checked;
+                    li.classList.toggle('completed', item.completed);
+                    saveToLocalStorage();
+                    updateStats();
+                });
+
+                // 编辑文本
+                let isEditing = false;
+                editBtn.addEventListener('click', function() {
+                    if (!isEditing) {
+                        textInput.removeAttribute('readonly');
+                        textInput.focus();
+                        textInput.select();
+                        editBtn.innerHTML = '<i class="fas fa-check"></i>';
+                        editBtn.title = "保存";
+                        isEditing = true;
+                    } else {
+                        const newText = textInput.value.trim();
+                        if (newText) {
+                            item.text = newText;
+                            saveToLocalStorage();
+                            textInput.setAttribute('readonly', true);
+                            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                            editBtn.title = "编辑";
+                            isEditing = false;
+                        } else {
+                            alert('事项内容不能为空！');
+                            textInput.focus();
+                        }
+                    }
+                });
+
+                // 按Enter保存编辑
+                textInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        editBtn.click(); // 触发保存
+                    }
+                });
+
+                // 失去焦点时自动保存
+                textInput.addEventListener('blur', function() {
+                    if (isEditing) {
+                        const newText = textInput.value.trim();
+                        if (newText) {
+                            item.text = newText;
+                            saveToLocalStorage();
+                        } else {
+                            textInput.value = item.text; // 恢复原文本
+                        }
+                        textInput.setAttribute('readonly', true);
+                        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                        editBtn.title = "编辑";
+                        isEditing = false;
+                    }
+                });
+
+                // 删除事项
+                deleteBtn.addEventListener('click', function() {
+                    if (confirm('确定要删除这项吗？')) {
+                        const index = todoItems.findIndex(i => i.id === item.id);
+                        if (index > -1) {
+                            todoItems.splice(index, 1);
+                            saveToLocalStorage();
+                            renderTodoList();
+                            updateStats();
+                        }
+                    }
+                });
+            });
+        }
+
+        function updateStats() {
+            const total = todoItems.length;
+            const completed = todoItems.filter(item => item.completed).length;
+            const remaining = total - completed;
+            const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+            totalCountEl.textContent = total;
+            completedCountEl.textContent = completed;
+            remainingCountEl.textContent = remaining;
+            progressPercentEl.textContent = percent + '%';
+            progressBar.style.width = percent + '%';
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('grad100Todos', JSON.stringify(todoItems));
+        }
+
+        // 简单的HTML转义，防止XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
