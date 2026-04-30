@@ -142,7 +142,7 @@
   }
 
   function initEasterEggRedirect() {
-    var targetUrl = "https://travel-wallet-five.vercel.app/";
+    var targetUrl = "https://www.jolyndra.top/";
     var avatar = document.querySelector(".profile-avatar");
     if (!avatar) return;
 
