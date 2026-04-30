@@ -559,7 +559,17 @@
     var saveBtn = document.getElementById("share-image-save");
     var copyBtn = document.getElementById("share-image-copy-link");
     var copyFb = document.getElementById("share-image-copy-feedback");
-    if (!openBtn || !dlg || typeof dlg.showModal !== "function") return;
+    if (!openBtn || !dlg) return;
+
+    var canUseNativeDialog = typeof dlg.showModal === "function";
+    function openDialog() {
+      if (canUseNativeDialog) dlg.showModal();
+      else dlg.setAttribute("open", "");
+    }
+    function closeDialog() {
+      if (canUseNativeDialog && typeof dlg.close === "function") dlg.close();
+      else dlg.removeAttribute("open");
+    }
 
     function resetUi() {
       dlg.removeAttribute("data-share-ready");
@@ -567,12 +577,13 @@
       preview.hidden = true;
       preview.removeAttribute("src");
       loading.hidden = false;
-      if (actions) actions.hidden = true;
+      if (actions) actions.hidden = false;
+      if (saveBtn) saveBtn.disabled = true;
       if (copyFb) copyFb.hidden = true;
     }
 
     openBtn.addEventListener("click", function () {
-      dlg.showModal();
+      openDialog();
       resetUi();
       generateShareCardImage()
         .then(function () {
@@ -583,6 +594,7 @@
           preview.hidden = false;
           dlg.setAttribute("data-share-ready", "1");
           if (actions) actions.hidden = false;
+          if (saveBtn) saveBtn.disabled = false;
         })
         .catch(function () {
           dlg.removeAttribute("data-share-ready");
@@ -590,6 +602,8 @@
           errEl.textContent = getDict()["share.err_generate"] || "";
           errEl.hidden = false;
           if (actions) actions.hidden = true;
+          if (actions) actions.hidden = false;
+          if (saveBtn) saveBtn.disabled = true;
         });
     });
 
@@ -619,9 +633,9 @@
       });
     }
 
-    if (closeBtn) closeBtn.addEventListener("click", function () { dlg.close(); });
+    if (closeBtn) closeBtn.addEventListener("click", function () { closeDialog(); });
     dlg.addEventListener("click", function (e) {
-      if (e.target === dlg) dlg.close();
+      if (e.target === dlg) closeDialog();
     });
   }
 
@@ -629,18 +643,27 @@
     var openBtn = document.getElementById("wechat-open");
     var dlg = document.getElementById("wechat-dialog");
     var closeBtn = document.getElementById("wechat-dialog-close");
-    if (!openBtn || !dlg || typeof dlg.showModal !== "function") return;
+    if (!openBtn || !dlg) return;
+    var canUseNativeDialog = typeof dlg.showModal === "function";
+    function openDialog() {
+      if (canUseNativeDialog) dlg.showModal();
+      else dlg.setAttribute("open", "");
+    }
+    function closeDialog() {
+      if (canUseNativeDialog && typeof dlg.close === "function") dlg.close();
+      else dlg.removeAttribute("open");
+    }
 
     openBtn.addEventListener("click", function () {
-      dlg.showModal();
+      openDialog();
     });
     if (closeBtn) {
       closeBtn.addEventListener("click", function () {
-        dlg.close();
+        closeDialog();
       });
     }
     dlg.addEventListener("click", function (e) {
-      if (e.target === dlg) dlg.close();
+      if (e.target === dlg) closeDialog();
     });
   }
 
