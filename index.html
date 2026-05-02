@@ -141,12 +141,18 @@
         </aside>
 
         <div class="content">
-          <p class="intro" data-i18n="intro">软件工程本科在读。研究兴趣主要集中在大模型性能优化、多模态，以及 LLM 基础设施（推理与 Serving、通信与并行、调度与集群等）。当前正在进行「高性能 AE 分离式大模型推理通信库」相关毕业设计工作。</p>
-
           <main id="main-content" tabindex="-1">
-            <section class="section-positioning" aria-labelledby="positioning-heading" id="section-positioning">
-              <h2 id="positioning-heading" data-i18n="sec.positioning">个人定位</h2>
-              <p class="positioning-line" data-i18n-html="positioning.line">本科生 · 方向为大模型性能优化、多模态与 LLM Infra；欢迎<strong>实习 / 科研助理 / 技术合作</strong>等机会（远程或北京线下可议）。</p>
+            <section class="section-about" aria-labelledby="about-heading" id="section-about">
+              <h2 id="about-heading" data-i18n="sec.about">自我介绍</h2>
+              <div class="about-body" data-i18n-html="about.body">
+                <p>
+                  我是<strong>尹立健</strong>，北京航空航天大学软件学院软件工程专业本科生；将于 2026 年 6 月本科毕业，并进入<strong>上海交通大学计算机学院</strong>攻读硕士研究生。
+                </p>
+                <p>
+                  课程与项目涵盖编译、软件工程、Web 与分布式系统等；曾完成供应链场景下图神经网络（GNN）链路预测等科研训练。现阶段聚焦大模型性能优化、多模态与 LLM 基础设施，毕业设计为高性能 AE 分离式推理通信库相关课题。
+                </p>
+                <p>欢迎<strong>实习、科研助理与技术合作</strong>等机会（远程或北京线下可议）。</p>
+              </div>
             </section>
 
             <section id="section-interests">
@@ -200,12 +206,11 @@
               </ul>
             </section>
 
-            <section class="section-skills" id="section-skills">
-              <h2 data-i18n="sec.skills">技术栈</h2>
-              <div class="skill-groups">
-                <div class="skill-group"><h3 data-i18n="skill.tier.proficient">熟练</h3><p class="skill-items" data-i18n="skill.proficient">C++、Python、Git、Vue 3、JavaScript、Java、Spring Boot、MySQL</p></div>
-                <div class="skill-group"><h3 data-i18n="skill.tier.familiar">了解</h3><p class="skill-items" data-i18n="skill.familiar">Docker、Kubernetes、Elasticsearch、Jenkins、Apifox</p></div>
-                <div class="skill-group"><h3 data-i18n="skill.tier.learning">正在学</h3><p class="skill-items" data-i18n="skill.learning">大模型推理系统、RDMA/网络、分布式通信与性能分析</p></div>
+            <section class="section-skills" id="section-skills" aria-labelledby="skills-heading">
+              <h2 id="skills-heading" data-i18n="sec.skills">技术栈</h2>
+              <p class="skill-matrix-hint" data-i18n="skill.matrix_hint">窄屏下可横向滑动查看五列；每列标签过多时可在此列内滚动。</p>
+              <div class="skill-matrix-wrap">
+                <div class="skill-matrix" id="skill-matrix"></div>
               </div>
             </section>
 

@@ -125,20 +125,131 @@
       .replace(/"/g, "&quot;");
   }
 
-  function wrapSkillPills() {
-    document.querySelectorAll(".skill-items").forEach(function (el) {
-      var text = el.textContent.trim();
-      if (!text) return;
-      var parts = text.split(/(?:,|，|、)\s*/).map(function (s) {
-        return s.trim();
-      }).filter(Boolean);
-      if (!parts.length) return;
-      el.innerHTML = parts
-        .map(function (p) {
-          return '<span class="skill-pill">' + escapeHtml(p) + "</span>";
+  /** 站内 SVG（Simple Icons 品牌色），避免外链 CDN 被拦截导致 img 空白。 */
+  function skillIconUrl(slug) {
+    var file = String(slug).trim();
+    try {
+      return new URL("icons/" + encodeURIComponent(file) + ".svg", window.location.href).href;
+    } catch (e) {
+      return "./icons/" + encodeURIComponent(file) + ".svg";
+    }
+  }
+
+  /** 按领域分类；无 slug 的项仅显示文字标签。图标为仓库内 icons/*.svg（Simple Icons 品牌色）。 */
+  var SKILL_SPEC = [
+    {
+      titleKey: "skill.cat.frontend",
+      chips: [
+        { slug: "html5", label: "HTML" },
+        { slug: "css", label: "CSS" },
+        { slug: "javascript", label: "JavaScript" },
+        { slug: "typescript", label: "TypeScript" },
+        { slug: "react", label: "React" },
+        { slug: "vuedotjs", label: "Vue 3" },
+        { slug: "vite", label: "Vite" },
+        { slug: "tailwindcss", label: "Tailwind CSS" },
+        { slug: "npm", label: "npm" },
+        { slug: "axios", label: "Axios" },
+        { slug: "openapiinitiative", label: "RESTful API" },
+      ],
+    },
+    {
+      titleKey: "skill.cat.backend",
+      chips: [
+        { slug: "openjdk", label: "Java" },
+        { slug: "springboot", label: "Spring Boot" },
+        { slug: "python", label: "Python" },
+        { slug: "fastapi", label: "FastAPI" },
+        { slug: "django", label: "Django" },
+      ],
+    },
+    {
+      titleKey: "skill.cat.database",
+      chips: [
+        { slug: "mysql", label: "MySQL" },
+        { slug: "elasticsearch", label: "Elasticsearch" },
+        { slug: "redis", label: "Redis" },
+      ],
+    },
+    {
+      titleKey: "skill.cat.ai",
+      chips: [
+        { slug: "pytorch", label: "PyTorch" },
+        { slug: "tensorflow", label: "TensorFlow" },
+        { slug: "pandas", label: "Pandas" },
+        { slug: "jupyter", label: "Jupyter" },
+        { slug: "onnx", label: "ONNX" },
+      ],
+    },
+    {
+      titleKey: "skill.cat.other",
+      chips: [
+        { slug: "git", label: "Git" },
+        { slug: "github", label: "GitHub" },
+        { slug: "docker", label: "Docker" },
+        { slug: "kubernetes", label: "Kubernetes" },
+        { slug: "jenkins", label: "Jenkins" },
+        { slug: "linux", label: "Linux" },
+        { slug: "cplusplus", label: "C++" },
+        { slug: "llvm", label: "LLVM IR" },
+        { slug: "apachemaven", label: "Maven" },
+        { slug: "swagger", label: "Apifox" },
+        { slug: "prometheus", label: "Prometheus" },
+      ],
+    },
+  ];
+
+  function renderSkillChip(c, dict) {
+    var label =
+      c.labelKey != null
+        ? dict[c.labelKey] != null
+          ? String(dict[c.labelKey])
+          : String(c.labelKey)
+        : String(c.label || "");
+    if (!label) return "";
+    var slugRaw = c.slug != null ? String(c.slug).trim() : "";
+    if (!slugRaw) {
+      return (
+        '<span class="skill-chip skill-chip--text">' +
+        '<span class="skill-chip-label">' +
+        escapeHtml(label) +
+        "</span></span>"
+      );
+    }
+    var src = skillIconUrl(slugRaw);
+    return (
+      '<span class="skill-chip">' +
+      '<img class="skill-chip-icon" src="' +
+      escapeHtml(src) +
+      '" alt="" width="18" height="18" loading="eager" decoding="async" referrerpolicy="no-referrer" />' +
+      '<span class="skill-chip-label">' +
+      escapeHtml(label) +
+      "</span></span>"
+    );
+  }
+
+  function renderSkillMatrix() {
+    var root = document.getElementById("skill-matrix");
+    if (!root) return;
+    var dict = getDict();
+    root.innerHTML = SKILL_SPEC.map(function (cat) {
+      var catTitle = escapeHtml(dict[cat.titleKey] || cat.titleKey);
+      var chips = cat.chips
+        .map(function (c) {
+          return renderSkillChip(c, dict);
         })
         .join("");
-    });
+      return (
+        '<div class="skill-category-block">' +
+        '<h4 class="skill-category-title">' +
+        catTitle +
+        "</h4>" +
+        '<div class="skill-col-scroll">' +
+        '<div class="skill-items skill-items--col">' +
+        chips +
+        "</div></div></div>"
+      );
+    }).join("");
   }
 
   function initNavScrollSpy() {
@@ -286,7 +397,7 @@
     if (btt && dict["a11y.back_to_top"]) btt.setAttribute("aria-label", dict["a11y.back_to_top"]);
 
     syncThemeSelect();
-    wrapSkillPills();
+    renderSkillMatrix();
     refreshSiteStats();
     refreshVoyagerStat();
   }

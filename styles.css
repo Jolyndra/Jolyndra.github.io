@@ -261,12 +261,20 @@ span.profile-meta-value {
   font-weight: 500;
 }
 
-.content > .intro {
+.section-about .about-body {
   margin-top: 0;
   font-size: 1.075rem;
   line-height: 1.85;
   max-width: 52rem;
   letter-spacing: 0.02em;
+}
+
+.section-about .about-body p {
+  margin: 10px 0 0;
+}
+
+.section-about .about-body p:first-child {
+  margin-top: 0;
 }
 
 main {
@@ -301,7 +309,9 @@ main section { scroll-margin-top: var(--anchor-scroll-margin); }
   outline-offset: 6px;
   border-radius: 2px;
 }
-.positioning-line strong { color: var(--accent); }
+.about-body strong {
+  color: var(--accent);
+}
 
 ul { margin: 0; padding-left: 20px; }
 .timeline {
@@ -335,26 +345,142 @@ ul { margin: 0; padding-left: 20px; }
 
 .time { color: var(--muted); white-space: nowrap; }
 
-.skill-groups { display: grid; gap: 18px; }
-@media (min-width: 640px) { .skill-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.skill-matrix-hint {
+  margin: -4px 0 10px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 52rem;
+}
+
+.skill-matrix-wrap {
+  overflow-x: auto;
+  overflow-y: visible;
+  margin-top: 2px;
+  padding-bottom: 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+.skill-matrix {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px 14px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .skill-matrix {
+    min-width: 620px;
+    grid-template-columns: repeat(5, minmax(108px, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .skill-matrix {
+    gap: 14px 18px;
+  }
+}
+
+.skill-category-block {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, var(--link));
+  border-radius: 10px;
+  padding: 10px 10px 8px;
+  background: color-mix(in srgb, var(--bg) 96%, var(--border));
+}
+
+.skill-category-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.skill-col-scroll {
+  flex: 1;
+  min-height: 0;
+  max-height: min(46vh, 400px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  margin-right: -2px;
+}
+
+.skill-col-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.skill-col-scroll::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--border) 75%, var(--muted));
+  border-radius: 999px;
+}
 
 .skill-items {
-  margin: 10px 0 0;
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
 }
 
-.skill-pill {
-  display: inline-block;
-  padding: 5px 11px;
-  border-radius: 999px;
+.skill-items--col {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.skill-chip {
+  --skill-chip-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px 6px 8px;
+  border-radius: var(--skill-chip-radius);
   font-size: 13px;
-  line-height: 1.45;
+  line-height: 1.35;
   border: 1px solid color-mix(in srgb, var(--border) 70%, var(--link));
   background: color-mix(in srgb, var(--bg) 94%, var(--link));
   color: var(--text);
+  box-sizing: border-box;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.skill-items--col .skill-chip {
+  width: 100%;
+}
+
+.skill-chip-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  max-width: 18px;
+  max-height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  flex: 0 0 18px;
+  object-fit: contain;
+  object-position: center;
+  visibility: visible;
+  opacity: 1;
+}
+
+.skill-chip-label {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.skill-chip--text {
+  padding-left: 11px;
+  padding-right: 11px;
 }
 
 .section-achievements .ach-block + .ach-block { margin-top: 20px; }
@@ -477,7 +603,6 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
   .timeline { margin-left: 6px; }
   .timeline li { grid-template-columns: 1fr; gap: 4px; padding-left: 18px; }
   .timeline li::before { left: -6px; }
-  .skill-groups { grid-template-columns: 1fr; }
 }
 
 /* 导航栏主题：樱花粉 / 午夜蓝 / 琥珀（与浅色默认、暗色并列；微调 --bg / --link / --accent） */
