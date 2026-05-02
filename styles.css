@@ -345,14 +345,6 @@ ul { margin: 0; padding-left: 20px; }
 
 .time { color: var(--muted); white-space: nowrap; }
 
-.skill-matrix-hint {
-  margin: -4px 0 10px;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--muted);
-  max-width: 52rem;
-}
-
 .skill-matrix-wrap {
   overflow-x: auto;
   overflow-y: visible;
