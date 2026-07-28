@@ -175,7 +175,12 @@ html[lang="en"] body {
   border-radius: 2px;
 }
 
-.page-layout { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 40px; align-items: start; }
+.page-layout { display: grid; grid-template-columns: 220px minmax(0,1fr); gap: 40px; align-items: start; min-width: 0; }
+
+/* 防止宽内容（如技术栈横向滚动区）把 grid 子项撑破视口导致整页横向溢出 */
+.content {
+  min-width: 0;
+}
 .sidebar {
   position: sticky;
   top: var(--sticky-nav-offset);
@@ -279,6 +284,7 @@ span.profile-meta-value {
 
 main {
   max-width: 52rem;
+  min-width: 0;
 }
 
 h2 {
@@ -346,11 +352,16 @@ ul { margin: 0; padding-left: 20px; }
 .time { color: var(--muted); white-space: nowrap; }
 
 .skill-matrix-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   overflow-x: auto;
   overflow-y: visible;
   margin-top: 2px;
   padding-bottom: 6px;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
   scrollbar-gutter: stable;
 }
 
@@ -577,15 +588,42 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
 @media (max-width: 720px) {
   :root {
     --sticky-nav-offset: 0px;
-    --anchor-scroll-margin: 104px;
+    /* 顶栏换行时略增高，锚点留白加大避免标题被挡 */
+    --anchor-scroll-margin: 132px;
   }
 
-  .container { padding: 22px 16px 40px; }
-  .top-nav-inner { padding: 14px 18px 16px; }
-  .top-nav { flex-wrap: wrap; align-items: flex-start; }
-  .quick-nav { gap: 4px 14px; }
+  html {
+    overflow-x: clip;
+  }
+
+  .container {
+    padding-top: 22px;
+    padding-bottom: 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .top-nav-inner {
+    padding-top: 14px;
+    padding-bottom: 16px;
+    padding-left: max(14px, env(safe-area-inset-left, 0px));
+    padding-right: max(18px, env(safe-area-inset-right, 0px));
+  }
+
+  .top-nav { flex-wrap: wrap; align-items: flex-start; row-gap: 10px; }
+  .quick-nav { gap: 4px 14px; flex: 1 1 auto; min-width: 0; }
+  .toolbar-cluster { flex-shrink: 0; }
+
   .page-layout { grid-template-columns: 1fr; gap: 28px; }
-  .sidebar { position: static; flex-direction: row; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    min-width: 0;
+    max-width: 100%;
+  }
   .profile-body { flex: 1; min-width: 0; }
   .profile-avatar { width: 96px; height: 96px; }
   .profile-name { font-size: 28px; }
@@ -595,6 +633,25 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
   .timeline { margin-left: 6px; }
   .timeline li { grid-template-columns: 1fr; gap: 4px; padding-left: 18px; }
   .timeline li::before { left: -6px; }
+
+  /* 英文长日期等在小屏允许换行，避免撑出横向滚动条 */
+  .timeline .time {
+    white-space: normal;
+  }
+
+  /* 窄屏减少 stable gutter 占宽，避免「假溢出」感 */
+  .skill-matrix-wrap {
+    scrollbar-gutter: auto;
+  }
+
+  .wechat-dialog {
+    max-width: min(calc(100vw - 24px), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 24px));
+  }
+
+  .share-image-dialog {
+    max-width: min(calc(100vw - 24px), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 24px));
+    width: min(520px, 100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  }
 }
 
 /* 导航栏主题：樱花粉 / 午夜蓝 / 琥珀（与浅色默认、暗色并列；微调 --bg / --link / --accent） */
