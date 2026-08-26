@@ -2,11 +2,6 @@
   var STORAGE_LANG = "lang";
   var STORAGE_THEME = "theme";
 
-  /** 旅行者1号：参考时刻与距离（km）、外推速率 km/s（与太阳径向量级一致，仅供展示） */
-  var VOYAGER_REF_MS = Date.UTC(2025, 0, 1, 0, 0, 0);
-  var VOYAGER_REF_KM = 24180000000;
-  var VOYAGER_RATE_KMS = 17;
-
   function getLang() {
     return localStorage.getItem(STORAGE_LANG) === "en" ? "en" : "zh";
   }
@@ -85,7 +80,7 @@
     if (canon) canon.setAttribute("href", base + "/");
     var ogUrl = document.getElementById("meta-og-url");
     if (ogUrl) ogUrl.setAttribute("content", base + "/");
-    var imgUrl = toAbsAsset("avatar.jpg");
+    var imgUrl = toAbsAsset("og.png");
     var ogi = document.getElementById("meta-og-image");
     if (ogi) ogi.setAttribute("content", imgUrl);
     var twi = document.getElementById("meta-twitter-image");
@@ -184,37 +179,6 @@
     return days + " 天 " + hours + " 小时 " + mins + " 分 " + secs + " 秒";
   }
 
-  function estimateVoyager1EarthKm() {
-    var body = document.body;
-    if (!body) return NaN;
-    var refMs = parseFloat(body.getAttribute("data-voyager-ref-ms"));
-    var refKm = parseFloat(body.getAttribute("data-voyager-ref-km"));
-    var rate = parseFloat(body.getAttribute("data-voyager-rate-kms"));
-    if (!isFinite(refMs)) refMs = VOYAGER_REF_MS;
-    if (!isFinite(refKm)) refKm = VOYAGER_REF_KM;
-    if (!isFinite(rate) || rate <= 0) rate = VOYAGER_RATE_KMS;
-    return refKm + ((Date.now() - refMs) / 1000) * rate;
-  }
-
-  function formatVoyagerDistanceKm(km, lang) {
-    if (!isFinite(km) || km < 0) return "—";
-    var n = Math.round(km);
-    var loc = lang === "en" ? "en-US" : "zh-CN";
-    return n.toLocaleString(loc) + " km";
-  }
-
-  function refreshVoyagerStat() {
-    var lang = getLang();
-    var dict = getDict();
-    var voyagerEl = document.getElementById("stat-voyager");
-    if (!voyagerEl) return;
-    var vkm = estimateVoyager1EarthKm();
-    voyagerEl.textContent = formatVoyagerDistanceKm(vkm, lang);
-    var vtitle = dict["stats.voyager_title"];
-    if (vtitle) voyagerEl.setAttribute("title", vtitle);
-    else voyagerEl.removeAttribute("title");
-  }
-
   function refreshSiteStats() {
     var lang = getLang();
     var uptimeEl = document.getElementById("stat-uptime");
@@ -263,7 +227,6 @@
 
     syncThemeSelect();
     refreshSiteStats();
-    refreshVoyagerStat();
   }
 
   function injectPlausible() {
@@ -698,7 +661,6 @@
     initBackToTop();
     initNavScrollSpy();
     setInterval(refreshSiteStats, 1000);
-    setInterval(refreshVoyagerStat, 100);
   }
 
   if (document.readyState === "loading") {

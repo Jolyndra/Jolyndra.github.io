@@ -373,6 +373,12 @@ ul { margin: 0; padding-left: 20px; }
   margin-top: 10px;
 }
 
+.projects-more {
+  margin: 12px 0 0 10px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 .section-achievements .ach-block + .ach-block { margin-top: 20px; }
 
 .ach-list {
@@ -443,10 +449,6 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
   font-size: 14px;
   line-height: 1.6;
   color: var(--muted);
-}
-
-.site-stats--voyager {
-  margin-top: 6px;
 }
 
 .site-stats-line {
@@ -533,6 +535,18 @@ footer { margin-top: 34px; padding-top: 12px; border-top: 1px solid var(--border
   .share-image-dialog {
     max-width: min(calc(100vw - 24px), calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 24px));
     width: min(520px, 100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-nav a[href="#contact"],
+  .quick-nav a[href="#section-friends"] {
+    display: none;
+  }
+
+  .top-nav-inner {
+    padding-top: 10px;
+    padding-bottom: 12px;
   }
 }
 
