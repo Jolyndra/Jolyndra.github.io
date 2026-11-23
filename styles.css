@@ -856,3 +856,6 @@ html[data-theme="dark"] .back-to-top {
 html[data-theme="dark"] .share-image-error {
   color: #fca5a5;
 }
+
+/* Featured work */
+.featured-projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0 28px}.featured-card{display:flex;flex-direction:column;gap:10px;padding:22px;border:1px solid rgba(120,130,150,.22);border-radius:18px;background:rgba(130,145,165,.055)}.featured-card:last-child{grid-column:1/-1}.featured-card h3{margin:0;font-size:1.15rem;line-height:1.35}.featured-card p{margin:0;line-height:1.7}.featured-kicker{font-size:.75rem;letter-spacing:.09em;font-weight:700;opacity:.65}.featured-tags{font-size:.85rem;opacity:.7;margin-top:auto}.featured-card a{align-self:flex-start;font-weight:600}.featured-card:hover{border-color:rgba(105,125,170,.5);transform:translateY(-2px);transition:transform .2s,border-color .2s}@media(max-width:700px){.featured-projects{grid-template-columns:1fr}.featured-card:last-child{grid-column:auto}}@media(prefers-reduced-motion:reduce){.featured-card:hover{transform:none}}
