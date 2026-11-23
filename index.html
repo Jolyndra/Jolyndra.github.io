@@ -39,7 +39,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap"
     />
-    <link rel="stylesheet" href="./styles.css?v=20260826" />
+    <link rel="stylesheet" href="./styles.css?v=20261123" />
     <script>
       try {
         var th = localStorage.getItem("theme");
@@ -103,7 +103,7 @@
           <div class="profile-body">
             <h1 class="profile-name" data-i18n="profile.name">尹立健</h1>
             <p class="profile-school" data-i18n="profile.school">上海交通大学 · 计算机学院</p>
-            <p class="profile-focus" data-i18n="profile.focus">聚焦大型语言模型</p>
+            <p class="profile-focus" data-i18n="profile.focus">端侧 Agent · LLM Systems</p>
             <ul class="profile-meta" aria-label="地址与联系方式">
               <li class="profile-meta-row">
                 <span class="profile-meta-icon" aria-hidden="true">📍</span>
@@ -142,9 +142,9 @@
                   我是<strong>尹立健</strong>，现为<strong>上海交通大学计算机学院</strong>计算机与大数据技术专业硕士研究生，本科毕业于北京航空航天大学软件学院软件工程专业。
                 </p>
                 <p>
-                  课程与项目涵盖编译、软件工程、Web 与分布式系统等；曾完成供应链场景下图神经网络（GNN）链路预测等科研训练。现阶段聚焦大模型性能优化、Agentic 与 LLM 基础设施，毕业设计为高性能 AE 分离式推理通信库相关课题。
+                  目前关注端侧 Agent 与云端模型协同、模型路由及 KV Cache 优化。我通过可复现的评测和系统实现，探索工具调用的可靠性、推理时延与资源成本之间的权衡。本科毕业设计 Anaxa 则聚焦 AE 分离式推理中的低时延通信。
                 </p>
-                <p>欢迎<strong>实习、科研助理与技术合作</strong>等机会（远程或上海线下可议）。</p>
+                <p>欢迎交流 <strong>Agent 系统、LLM Serving 与推理基础设施</strong>，也期待相关的实习与合作机会。</p>
               </div>
             </section>
 
@@ -152,8 +152,8 @@
               <h2 data-i18n="sec.interests">研究兴趣</h2>
               <ul>
                 <li data-i18n-html="interest.1"><strong>大模型性能优化</strong>：推理/训练加速、Attention–Expert 分离式推理、低时延跨设备通信、吞吐与时延权衡等。</li>
-                <li data-i18n-html="interest.2"><strong>Agentic</strong>：LLM Agent 框架与工具调用、Workflow Planning 与 Memory、多模型能力评测与上下文开销优化等。</li>
-                <li data-i18n-html="interest.3"><strong>LLM Infra</strong>：Serving 栈、调度与弹性扩缩、RDMA/网络与存储、可观测性与工程化落地。</li>
+                <li data-i18n-html="interest.2"><strong>端侧 Agent 与端云协同</strong>：本地模型执行、失败回退、工具调用评测与模型路由。</li>
+                <li data-i18n-html="interest.3"><strong>LLM 基础设施</strong>：KV Cache、Serving 调度、RDMA 通信与系统性能评估。</li>
               </ul>
             </section>
 
@@ -191,8 +191,13 @@
 
             <section id="section-projects">
               <h2 data-i18n="sec.projects">项目经历</h2>
+              <div class="featured-projects">
+                <article class="featured-card"><span class="featured-kicker">RESEARCH · IN PROGRESS</span><h3>端侧 Agent × 云端路由</h3><p>探索本地小模型执行、失败后升级云端、工具检索及预测式预热。围绕 BFCL、GAIA 等基准构建评测流程，分析成功率、时延与 Token 成本。</p><span class="featured-tags">Agent · Routing · KV Cache</span></article>
+                <article class="featured-card"><span class="featured-kicker">SYSTEMS · UNDERGRADUATE THESIS</span><h3>Anaxa · AE 分离式推理通信</h3><p>面向高频小消息的推理通信原型，结合 RDMA Write、拓扑感知路径和成员管理，评估 dispatch / combine 的时延表现。</p><span class="featured-tags">RDMA · GPU · Inference</span></article>
+                <article class="featured-card"><span class="featured-kicker">PRODUCT · PERSONAL PROJECT</span><h3>Iteris · 旅行与生活记录</h3><p>从行程、日历到票夹与回顾的个人 Web 产品，持续打磨移动端体验与数据管理。</p><a href="https://www.jolyndra.top/" target="_blank" rel="noopener noreferrer">访问 Iteris</a><span class="featured-tags">Vue 3 · TypeScript · Product</span></article>
+              </div>
               <details class="projects-details">
-                <summary data-i18n="projects.toggle">项目经历（8 项）</summary>
+                <summary data-i18n="projects.toggle">更多课程与实践项目（8 项）</summary>
                 <ul class="timeline projects-timeline">
                 <li><span class="time" data-i18n="time.p1">2023.08 - 2023.09</span><div data-i18n-html="proj.1"><strong>坤坤快跑小游戏</strong><br />基于 C++ + EasyX 开发的 2D 跑酷小游戏。玩家需要在持续前进过程中躲避障碍、累积分数，并利用能量触发特殊飞行状态。</div></li>
                 <li><span class="time" data-i18n="time.p2">2023.09 - 2023.12</span><div data-i18n-html="proj.2"><strong>SanGuo Crisis 小游戏</strong><br />面向对象程序设计实践项目，基于 Java Swing 的 2D 动作闯关游戏，支持单人/双人模式、角色选择、技能战斗、道具拾取与关卡推进。</div></li>
@@ -245,7 +250,7 @@
           </main>
 
           <footer>
-            <p>© <span id="year"></span> <span class="footer-meta" data-i18n-html="footer.rights">尹立健 · 更新：2026 年 8 月</span></p>
+            <p>© <span id="year"></span> <span class="footer-meta" data-i18n-html="footer.rights">尹立健 · 更新：2026 年 11 月</span></p>
             <p class="site-stats" aria-label="站点统计">
               <span class="site-stats-line">
                 <span data-i18n="stats.uptime_label">本站已运行</span>
